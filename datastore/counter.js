@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const sprintf = require('sprintf-js').sprintf;
 
-var counter = 0;
+//var counter = 0;
 
 // Private helper functions ////////////////////////////////////////////////////
 
@@ -38,10 +38,75 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+//invoke readCounter
+//invoke writeCounter
+//what is the callback??
+//errFirstCallbackStructure--> callback(error, successResponse)
+
+exports.getNextUniqueId = (callback) => {
+  readCounter((readError, counter) => {
+    if (readError) {
+      callback (readError);
+      // return = callback
+      // error case (callback)
+    } else {
+      counter++;
+      writeCounter (counter, (writeError, counter) => {
+        if (writeError) {
+          callback (writeError);
+        // return = callback
+        // error case (callback)
+        } else {
+          // success case
+          // return/callback
+          //why is counter++ not down here
+          callback (null, counter);
+        }
+      });
+    }
+  });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// exports.getNextUniqueId = (callback) => {
+//   readCounter((readError, counter)=>{
+//     if (readError) {
+//       callback(readError);
+//       // throw ('this is an error');
+//     } else {
+//       counter++;
+//       writeCounter(counter, (writeError) => {
+//         if (writeError) {
+//           callback(writeError);
+//           // throw ('writeError');
+//         } else {
+//           callback(null, counter);
+//         }
+//       });
+//     }
+//   });
+//   // readCounter
+//   // writeCounter
+
+//   counter = counter + 1;
+//   return zeroPaddedNumber(counter);
+// };
 
 
 
